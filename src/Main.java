@@ -4,17 +4,28 @@ import java.util.Scanner;
 public class Main {
 	static Scanner sc = new Scanner(System.in);
 	static DecimalFormat df = new DecimalFormat("#0.00");
+
 	public static void main(String[] args) {
 		Pedido pedido = new Pedido();
-		try {
-			pedido = pedidoSelecionado();
-		} catch (Exception e) {
-			System.out.println("Erro, Reinicie a Operação");
-			System.exit(0);
-		}
-		double troco = efetuarPagamento(pedido);
-		if(troco > 0) {
-           calcularTroco(troco);
+		boolean encerrar = false;
+		int op = 0;
+		double troco = 0;
+		while (!encerrar) {
+			try {
+				pedido = pedidoSelecionado();
+				troco = efetuarPagamento(pedido);
+				if (troco > 0) {
+					calcularTroco(troco);
+				}
+				System.out.println("Deseja encerrar o sistema?\n1 - Sim\n2 - Não");
+				op = sc.nextInt();
+				if(op == 1) {
+					encerrar = encerrarSistema();
+				}
+			} catch (Exception e) {
+				System.out.println("Erro, Reinicie a Operação");
+				System.exit(0);
+			}
 		}
 	}
 
@@ -123,29 +134,35 @@ public class Main {
 	static void calcularTroco(double troco) {
 		System.out.println("Calculando Troco ...");
 		double total = troco;
-		while (troco > 0) {
+		
 			if (troco / 1 >= 1) {
 				System.out.println("Moedas de R$ 1,00 :" + (int) (troco / 1));
 				troco = troco - ((int) (troco / 1));
 			}
-			if ((troco / 0.5)+0.00000001 >= 1) {
-				System.out.println("Moedas de R$ 0,50 :" + (int) ((troco / 0.5)+0.000000001));
-				troco = troco - ((int) ((troco / 0.5)+0.0000000001))*0.5;
+			if ((troco / 0.5) + 0.00000001 >= 1) {
+				System.out.println("Moedas de R$ 0,50 :" + (int) ((troco / 0.5) + 0.000000001));
+				troco = troco - ((int) ((troco / 0.5) + 0.0000000001)) * 0.5;
 			}
-			if (((troco / 0.25)+0.000000001) >= 1) {
-				System.out.println("Moedas de R$ 0,25 :" + (int) ((troco / 0.25)+0.000000001));
-				troco = troco - ((int) ((troco / 0.25)+0.000000001))*0.25;
+			if (((troco / 0.25) + 0.000000001) >= 1) {
+				System.out.println("Moedas de R$ 0,25 :" + (int) ((troco / 0.25) + 0.000000001));
+				troco = troco - ((int) ((troco / 0.25) + 0.000000001)) * 0.25;
+			}
+
+			if (((troco / 0.1) + 0.000000001) >= 1) {
+				System.out.println("Moedas de R$ 0,10 :" + (int) ((troco / 0.1) + 0.000000001));
+				troco = troco - ((int) ((troco / 0.1) + 0.000000001)) * 0.1;
+			}
+			if (((troco / 0.05) + 0.000000001) >= 1) {
+				System.out.println("Moedas de R$ 0,05 :" + (int) ((troco / 0.05) + 0.000000001));
+				troco = troco - ((int) ((troco / 0.05) + 0.000000001)) * 0.05;
 			}
 			
-			if (((troco / 0.1)+0.000000001) >= 1) {
-				System.out.println("Moedas de R$ 0,10 :" + (int) ((troco / 0.1)+0.000000001));
-				troco = troco - ((int) ((troco / 0.1)+0.000000001))*0.1;
-			}
-			if (((troco / 0.05)+0.000000001) >= 1) {
-				System.out.println("Moedas de R$ 0,05 :" + (int) ((troco / 0.05)+0.000000001));
-				troco = troco - ((int) ((troco / 0.05)+0.000000001))*0.05;
-			}
-		}
-		System.out.println("Total: "+df.format(total));
+		System.out.println("Total: " + df.format(total));
+	}
+
+	static boolean encerrarSistema() {
+		System.out.println("Obrigado, Até Mais!!");
+		return true;
+
 	}
 }
